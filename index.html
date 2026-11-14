@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>JS Quiz</title>
+</head>
+<body>
+    <main class="quiz-card">
+        <div class="quiz-container">
+            <!--Progress Bar-->
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <!--Quiz Header-->
+            <div class="quiz-header">
+                <div class="quiz-title-container">
+                    <h1 class="quiz-title">JAVASCRIPT QUIZ</h1>
+                    <h6 id="question-count" class="question-count">Question 1 of 5</h6>
+                </div>
+            </div>
+
+            <!--Quiz Question-->
+            <div class="question-container">
+                <h2 id="question" class="question">Which keyword creates a variable that can be reassigned?</h2>
+
+                <!--Quiz Answers-->
+                <div id="answer-btns" class="answer-btns-container">
+                    <button class="answer-btn" type="button">const</button>
+                    <button class="answer-btn" type="button">let</button>
+                    <button class="answer-btn" type="button">function</button>
+                    <button class="answer-btn" type="button">return</button>
+                </div>
+
+                <!--Quiz Controls-->
+                <div class="quiz-controls">
+                    <button id="next-btn" class="next-btn" type="button">Next Question</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
