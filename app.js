@@ -116,4 +116,37 @@ const questions = [
     },
 ];
 
+
 // Set the state for the quiz, the default first question, no scores
+// Quiz state (how should the default state of the app when the user first open it)
+// The current index and the score should be 0
+// Use let variable because it's assignable later in the code
+let currentQuestionIndex = 0;
+let currentScore = 0 
+
+function displayQuestion() {
+    // Convert the question index to user-friendly number to be displayed on the screen (by adding it to 1)
+    let currentQuestionNumber = currentQuestionIndex + 1 ;
+
+    // Get the total number of questions (Which is the length of the array that contains the questions)
+    let totalQuestionsNumber = questions.length;
+
+    // Change the text of question count
+    questionCount.textContent = "Question " + currentQuestionNumber + " of " + totalQuestionsNumber;
+
+    // Get the current question of the questions array to display it
+    const currentQuestion = questions[currentQuestionIndex].theQuestion;
+
+    // Change the text of the question
+    question.textContent = currentQuestion;
+
+    
+    // To Change the progress bar
+    // We need to change the width property percentage
+    let questionProgress = (currentQuestionNumber / totalQuestionsNumber * 100) + "%";
+    console.log(questionProgress);
+    // Apply the width to the progress bar  
+    progressFill.style.width = questionProgress; 
+}
+
+displayQuestion();
