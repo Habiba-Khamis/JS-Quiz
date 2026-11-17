@@ -129,6 +129,18 @@ h1 {
     border-color: #75624b6e;
 }
 
+.answer-btn.correct {
+    background-color: #bef29c8d;
+    border-color: #54a31fc4;
+    color: #112503f8;
+}
+
+.answer-btn.incorrect {
+    background-color: #a9454594;
+    border-color: #b32222c6;
+    color: #380404;
+}
+
 /* Quiz controls */
 .quiz-controls {
     margin-top: 2rem;

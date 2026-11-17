@@ -125,28 +125,73 @@ let currentQuestionIndex = 0;
 let currentScore = 0 
 
 function displayQuestion() {
+
+    // Get the current question from the questions array
+    const currentQuestion = questions[currentQuestionIndex];
+
     // Convert the question index to user-friendly number to be displayed on the screen (by adding it to 1)
-    let currentQuestionNumber = currentQuestionIndex + 1 ;
+    const currentQuestionNumber = currentQuestionIndex + 1 ;
 
     // Get the total number of questions (Which is the length of the array that contains the questions)
-    let totalQuestionsNumber = questions.length;
+    const totalQuestionsNumber = questions.length;
 
     // Change the text of question count
     questionCount.textContent = "Question " + currentQuestionNumber + " of " + totalQuestionsNumber;
 
-    // Get the current question of the questions array to display it
-    const currentQuestion = questions[currentQuestionIndex].theQuestion;
-
     // Change the text of the question
-    question.textContent = currentQuestion;
-
+    question.textContent = currentQuestion.theQuestion;
     
     // To Change the progress bar
     // We need to change the width property percentage
     let questionProgress = (currentQuestionNumber / totalQuestionsNumber * 100) + "%";
-    console.log(questionProgress);
+
     // Apply the width to the progress bar  
-    progressFill.style.width = questionProgress; 
+    progressFill.style.width = questionProgress;
+
+    // Display the answers of each question dynamically
+    // Loop through each item of the options array
+    for (let i = 0; i < currentQuestion.theOptions.length; i++) {
+
+        // Get the current answer
+        
+
+        // For each option we need to create a new element
+        const optionButton = document.createElement("button");
+
+        // Add the class to it to apply CSS style
+        optionButton.classList.add("answer-btn");
+
+        // Display the text inside it
+        optionButton.textContent = currentQuestion.theOptions[i].text;
+
+
+        // Call the check answer function when the button is clicked
+        optionButton.addEventListener("click", function() {
+            checkAnswer(currentQuestion.theOptions[i], optionButton);
+        })
+
+    
+        // Append it to the answer buttons container
+        answerBtns.appendChild(optionButton);
+  
+    }
+}
+
+// Check Answer Function
+// It takes 2 arguments
+function checkAnswer(selectedAnswer, selectedButton) {
+
+    // Add event listener to each button to know if the answer is correct
+    if (selectedAnswer.status ===  "true") {
+        // change the selected button to green
+        selectedButton.classList.add("correct");
+        // Increase the score by one
+        currentScore = currentScore + 1;
+
+    } else {
+        // Change the selected button to red
+        selectedButton.classList.add("incorrect");
+    }
 }
 
 displayQuestion();
