@@ -153,7 +153,7 @@ function displayQuestion() {
     for (let i = 0; i < currentQuestion.theOptions.length; i++) {
 
         // Get the current answer
-        
+        const currentAnswer = currentQuestion.theOptions[i];
 
         // For each option we need to create a new element
         const optionButton = document.createElement("button");
@@ -162,22 +162,24 @@ function displayQuestion() {
         optionButton.classList.add("answer-btn");
 
         // Display the text inside it
-        optionButton.textContent = currentQuestion.theOptions[i].text;
-
+        optionButton.textContent = currentAnswer.text;
 
         // Call the check answer function when the button is clicked
         optionButton.addEventListener("click", function() {
-            checkAnswer(currentQuestion.theOptions[i], optionButton);
+            checkAnswer(currentAnswer, optionButton);
         })
-
     
         // Append it to the answer buttons container
         answerBtns.appendChild(optionButton);
-  
     }
+
+    console.log(answerBtns.children.length);
+    console.log(questions[currentQuestionIndex].theOptions);
+    console.log(questions[currentQuestionIndex].theOptions[currentQuestionIndex].text);
+
 }
 
-// Check Answer Function
+// Check Answer Function (Work with the current question displayed)
 // It takes 2 arguments
 function checkAnswer(selectedAnswer, selectedButton) {
 
@@ -192,6 +194,24 @@ function checkAnswer(selectedAnswer, selectedButton) {
         // Change the selected button to red
         selectedButton.classList.add("incorrect");
     }
+
+    // Get the current question currently displayed
+    const currentQuestionDisplayed = questions[currentQuestionIndex];
+    
+    // Get all the answer buttons currently displayed (get them from the children of the button list)
+    const currentAnswersDisplayed =  answerBtns.children;
+
+    // Get the options for the current question
+    // Because we're going to have multiple different questions & choices loaded every tim we go to the next question
+    const currentAnswers = currentQuestionDisplayed.theOptions;
+
+    // Loop through all displayed answer buttons
+    for (let i = 0; i < currentAnswersDisplayed.length; i++) {
+        // For each button we need to get the answer 
+        
+    }
+
+    
 }
 
 displayQuestion();
