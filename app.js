@@ -5,6 +5,8 @@ const question = document.getElementById("question");
 const answerBtns = document.getElementById("answer-btns");
 const nextBtn = document.getElementById("next-btn");
 
+nextBtn.addEventListener("click", nextQuestion);
+
 // Quiz Questions
 // Create an array of objects
 const questions = [
@@ -124,10 +126,13 @@ const questions = [
 let currentQuestionIndex = 0;
 let currentScore = 0 
 
+// Global Variables 
+const CURRENTQUESTION = questions[currentQuestionIndex];
+
 function displayQuestion() {
 
-    // Get the current question from the questions array
-    const currentQuestion = questions[currentQuestionIndex];
+    // Empty the text content of the buttons 
+    answerBtns.textContent = "";
 
     // Convert the question index to user-friendly number to be displayed on the screen (by adding it to 1)
     const currentQuestionNumber = currentQuestionIndex + 1 ;
@@ -139,7 +144,7 @@ function displayQuestion() {
     questionCount.textContent = "Question " + currentQuestionNumber + " of " + totalQuestionsNumber;
 
     // Change the text of the question
-    question.textContent = currentQuestion.theQuestion;
+    question.textContent = CURRENTQUESTION.theQuestion;
     
     // To Change the progress bar
     // We need to change the width property percentage
@@ -150,10 +155,10 @@ function displayQuestion() {
 
     // Display the answers of each question dynamically
     // Loop through each item of the options array
-    for (let i = 0; i < currentQuestion.theOptions.length; i++) {
+    for (let i = 0; i < CURRENTQUESTION.theOptions.length; i++) {
 
         // Get the current answer
-        const currentAnswer = currentQuestion.theOptions[i];
+        const currentAnswer = CURRENTQUESTION.theOptions[i];
 
         // For each option we need to create a new element
         const optionButton = document.createElement("button");
@@ -173,8 +178,8 @@ function displayQuestion() {
         answerBtns.appendChild(optionButton);
     }
 
-    console.log(answerBtns.children.length);
-    console.log(questions[currentQuestionIndex].theOptions);
+    console.log(answerBtns.children);
+    console.log(questions[currentQuestionIndex].theOptions[0]);
     console.log(questions[currentQuestionIndex].theOptions[currentQuestionIndex].text);
 
 }
@@ -194,24 +199,58 @@ function checkAnswer(selectedAnswer, selectedButton) {
         // Change the selected button to red
         selectedButton.classList.add("incorrect");
     }
-
-    // Get the current question currently displayed
-    const currentQuestionDisplayed = questions[currentQuestionIndex];
     
     // Get all the answer buttons currently displayed (get them from the children of the button list)
-    const currentAnswersDisplayed =  answerBtns.children;
+    const currentOptionBtnsDisplayed =  answerBtns.children;
 
-    // Get the options for the current question
-    // Because we're going to have multiple different questions & choices loaded every tim we go to the next question
-    const currentAnswers = currentQuestionDisplayed.theOptions;
+    // Get the options array for the current question
+    // The options related to the specific question displayed
+    // Because we're going to have multiple different questions & choices loaded every time we go to the next question
+    const currentOptionsDisplayed = CURRENTQUESTION.theOptions;
 
     // Loop through all displayed answer buttons
-    for (let i = 0; i < currentAnswersDisplayed.length; i++) {
-        // For each button we need to get the answer 
-        
+    for (let i = 0; i < currentOptionsDisplayed.length; i++) {
+        // Get each button at a time
+        const currentDisplayedBtn = currentOptionBtnsDisplayed[i]; 
+
+        // For each individual button get the specific options related to it
+        // Access the index related to that button in the options array
+        const optionsRelatedToCurrentBtn = currentOptionsDisplayed[i];
+
+        // Reveal the correct answer
+        if (optionsRelatedToCurrentBtn.status === "true") {
+            // Lock all other options
+            currentDisplayedBtn.classList.add("correct");
+        }
+        // Once an answer has been selected we want to prevent it from being clicked again
+        currentDisplayedBtn.disabled = true;
     }
 
-    
+    // Once we select an answer then make the next button clickable again
+    nextBtn.disabled = false;
 }
 
 displayQuestion();
+
+// A function to display the next question
+function nextQuestion() {
+    // 1. We need to increase the index of current question
+    currentQuestionIndex = currentQuestionIndex + 1 ; 
+
+    // 2. Then check that we're not in the last question
+    // By checking the current question to the total questions (the length of the questions array)
+    if (currentQuestionIndex > questions.length) {
+        // Disable the next button
+        nextBtn.disabled = true;
+
+        // Remove the options buttons
+        answerBtns.textContent = "";
+
+        // Change the button to start the quiz again
+        nextBtn.textContent = "Start The Quiz";
+    } else {
+        // Display the next question
+        displayQuestion();
+    }
+
+}

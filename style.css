@@ -141,6 +141,11 @@ h1 {
     color: #380404;
 }
 
+/* Add the disabled pseudo selector */
+.answer-btn:disabled {
+    cursor: not-allowed; 
+}
+
 /* Quiz controls */
 .quiz-controls {
     margin-top: 2rem;
@@ -160,6 +165,13 @@ h1 {
 
 .next-btn:hover {
     background-color: #231504;
+}
+
+/* Make the next button disabled by default */
+.next-btn:disabled { 
+    background-color: #6a6a6a;
+    color: d1d1d1;
+    cursor: not-allowed;
 }
 
 /* Media Query */
