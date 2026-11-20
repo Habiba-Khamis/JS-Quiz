@@ -126,14 +126,19 @@ const questions = [
 let currentQuestionIndex = 0;
 let currentScore = 0 
 
-// Global Variables 
-const CURRENTQUESTION = questions[currentQuestionIndex];
+// A helper function to update the current question index when needed
+function  getCurrentQuestion() {
+    return questions[currentQuestionIndex];
+}
 
 function displayQuestion() {
 
     // Empty the text content of the buttons 
     answerBtns.textContent = "";
 
+    // update the current question index
+    const currentQuestion = getCurrentQuestion();
+    
     // Convert the question index to user-friendly number to be displayed on the screen (by adding it to 1)
     const currentQuestionNumber = currentQuestionIndex + 1 ;
 
@@ -144,7 +149,7 @@ function displayQuestion() {
     questionCount.textContent = "Question " + currentQuestionNumber + " of " + totalQuestionsNumber;
 
     // Change the text of the question
-    question.textContent = CURRENTQUESTION.theQuestion;
+    question.textContent = currentQuestion.theQuestion;
     
     // To Change the progress bar
     // We need to change the width property percentage
@@ -155,10 +160,10 @@ function displayQuestion() {
 
     // Display the answers of each question dynamically
     // Loop through each item of the options array
-    for (let i = 0; i < CURRENTQUESTION.theOptions.length; i++) {
+    for (let i = 0; i < currentQuestion.theOptions.length; i++) {
 
         // Get the current answer
-        const currentAnswer = CURRENTQUESTION.theOptions[i];
+        const currentAnswer = currentQuestion.theOptions[i];
 
         // For each option we need to create a new element
         const optionButton = document.createElement("button");
@@ -178,15 +183,14 @@ function displayQuestion() {
         answerBtns.appendChild(optionButton);
     }
 
-    console.log(answerBtns.children);
-    console.log(questions[currentQuestionIndex].theOptions[0]);
-    console.log(questions[currentQuestionIndex].theOptions[currentQuestionIndex].text);
-
 }
 
 // Check Answer Function (Work with the current question displayed)
 // It takes 2 arguments
 function checkAnswer(selectedAnswer, selectedButton) {
+
+    // Get the current question 
+    const currentQuestion = getCurrentQuestion();
 
     // Add event listener to each button to know if the answer is correct
     if (selectedAnswer.status ===  "true") {
@@ -206,7 +210,7 @@ function checkAnswer(selectedAnswer, selectedButton) {
     // Get the options array for the current question
     // The options related to the specific question displayed
     // Because we're going to have multiple different questions & choices loaded every time we go to the next question
-    const currentOptionsDisplayed = CURRENTQUESTION.theOptions;
+    const currentOptionsDisplayed = currentQuestion.theOptions;
 
     // Loop through all displayed answer buttons
     for (let i = 0; i < currentOptionsDisplayed.length; i++) {
@@ -235,11 +239,12 @@ displayQuestion();
 // A function to display the next question
 function nextQuestion() {
     // 1. We need to increase the index of current question
-    currentQuestionIndex = currentQuestionIndex + 1 ; 
+    currentQuestionIndex ++;
 
     // 2. Then check that we're not in the last question
     // By checking the current question to the total questions (the length of the questions array)
     if (currentQuestionIndex > questions.length) {
+        // End the quiz
         // Disable the next button
         nextBtn.disabled = true;
 
@@ -249,8 +254,8 @@ function nextQuestion() {
         // Change the button to start the quiz again
         nextBtn.textContent = "Start The Quiz";
     } else {
+
         // Display the next question
         displayQuestion();
     }
-
 }
