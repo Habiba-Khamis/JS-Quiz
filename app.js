@@ -16,19 +16,19 @@ const questions = [
         theOptions: [
             {
                 text: "const",
-                status: "false"
+                status: false
             },
             {
                 text: "let",
-                status: "true"
+                status: true
             },
             {
                 text: "function",
-                status: "false"
+                status: false
             },
             {
                 text: "return",
-                status: "false"
+                status: false
             }
         ]
     },
@@ -37,19 +37,19 @@ const questions = [
         theOptions: [
             {
                 text: "querySelectorAll()",
-                status: "false"
+                status: false
             },
             {
                 text: "createElement()",
-                status: "false"
+                status: false
             },
             {
                 text: "getElementById()",
-                status: "true"
+                status: true
             },
             {
                 text: "appendChild()",
-                status: "false"
+                status: false
             }
         ]
     },
@@ -58,19 +58,19 @@ const questions = [
         theOptions: [
             {
                 text: "String",
-                status: "false"
+                status: false
             },
             {
                 text: "Boolean",
-                status: "false"
+                status: false
             },
             {
                 text: "Number",
-                status: "false"
+                status: false
             },
             {
                 text: "Array",
-                status: "true"
+                status: true
             }
         ]
     },
@@ -79,19 +79,19 @@ const questions = [
         theOptions: [
             {
                 text: "appendChild",
-                status: "true"
+                status: true
             },
             {
                 text: "getElementById()",
-                status: "false"
+                status: false
             },
             {
                 text: "createElement()",
-                status: "false"
+                status: false
             },
             {
                 text: "textContent",
-                status: "false"
+                status: false
             }
         ]
     },
@@ -100,19 +100,19 @@ const questions = [
         theOptions: [
             {
                 text: "Array",
-                status: "false"
+                status: false
             },
             {
                 text: "Function",
-                status: "true"
+                status: true
             },
             {
                 text: "Boolean",
-                status: "false"
+                status: false
             },
             {
                 text: "Variable",
-                status: "false"
+                status: false
             }
         ]
     },
@@ -193,7 +193,7 @@ function checkAnswer(selectedAnswer, selectedButton) {
     const currentQuestion = getCurrentQuestion();
 
     // Add event listener to each button to know if the answer is correct
-    if (selectedAnswer.status ===  "true") {
+    if (selectedAnswer.status ===  true) {
         // change the selected button to green
         selectedButton.classList.add("correct");
         // Increase the score by one
@@ -222,7 +222,7 @@ function checkAnswer(selectedAnswer, selectedButton) {
         const optionsRelatedToCurrentBtn = currentOptionsDisplayed[i];
 
         // Reveal the correct answer
-        if (optionsRelatedToCurrentBtn.status === "true") {
+        if (optionsRelatedToCurrentBtn.status === true) {
             // Lock all other options
             currentDisplayedBtn.classList.add("correct");
         }
@@ -241,21 +241,34 @@ function nextQuestion() {
     // 1. We need to increase the index of current question
     currentQuestionIndex ++;
 
+    // Disable the next button 
+    nextBtn.disabled = true; 
+    
     // 2. Then check that we're not in the last question
     // By checking the current question to the total questions (the length of the questions array)
-    if (currentQuestionIndex > questions.length) {
-        // End the quiz
-        // Disable the next button
-        nextBtn.disabled = true;
+    if (currentQuestionIndex >= questions.length) {
 
+        // End the quiz
         // Remove the options buttons
         answerBtns.textContent = "";
 
         // Change the button to start the quiz again
-        nextBtn.textContent = "Start The Quiz";
+        nextBtn.textContent = "Restart The Quiz";
+
+        displayScore()
     } else {
 
         // Display the next question
         displayQuestion();
     }
+}
+
+// A function to display the score card
+function displayScore() {
+
+    // Display the end message 
+    questionCount.textContent = "You finished the quiz!";
+    
+    // Display user's score
+    question.textContent = "You scored " + currentScore + " out of " + questions.length;
 }
