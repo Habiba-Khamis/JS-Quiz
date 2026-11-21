@@ -5,8 +5,6 @@ const question = document.getElementById("question");
 const answerBtns = document.getElementById("answer-btns");
 const nextBtn = document.getElementById("next-btn");
 
-nextBtn.addEventListener("click", nextQuestion);
-
 // Quiz Questions
 // Create an array of objects
 const questions = [
@@ -78,7 +76,7 @@ const questions = [
         theQuestion: "Which method adds a childe element to a parent element?",
         theOptions: [
             {
-                text: "appendChild",
+                text: "appendChild()",
                 status: true
             },
             {
@@ -123,13 +121,26 @@ const questions = [
 // Quiz state (how should the default state of the app when the user first open it)
 // The current index and the score should be 0
 // Use let variable because it's assignable later in the code
-let currentQuestionIndex = 0;
-let currentScore = 0 
+let quizState = {
+    currentQuestionIndex: 0,
+    currentScore: 0,
+    quizComplete: false   
+};
+
+
+
 
 // A helper function to update the current question index when needed
 function  getCurrentQuestion() {
-    return questions[currentQuestionIndex];
+    return questions[quizState.currentQuestionIndex];
 }
+
+// The total question number
+// It's a fixed number calculated and used in multiple functions so we use it as a global variable
+const TOTALQUESTIONSNUMBER = questions.length;
+
+
+
 
 function displayQuestion() {
 
@@ -140,20 +151,20 @@ function displayQuestion() {
     const currentQuestion = getCurrentQuestion();
     
     // Convert the question index to user-friendly number to be displayed on the screen (by adding it to 1)
-    const currentQuestionNumber = currentQuestionIndex + 1 ;
+    const currentQuestionNumber = quizState.currentQuestionIndex + 1 ;
 
     // Get the total number of questions (Which is the length of the array that contains the questions)
-    const totalQuestionsNumber = questions.length;
+    
 
     // Change the text of question count
-    questionCount.textContent = "Question " + currentQuestionNumber + " of " + totalQuestionsNumber;
+    questionCount.textContent = "Question " + currentQuestionNumber + " of " + TOTALQUESTIONSNUMBER;
 
     // Change the text of the question
     question.textContent = currentQuestion.theQuestion;
     
     // To Change the progress bar
     // We need to change the width property percentage
-    let questionProgress = (currentQuestionNumber / totalQuestionsNumber * 100) + "%";
+    let questionProgress = (currentQuestionNumber / TOTALQUESTIONSNUMBER * 100) + "%";
 
     // Apply the width to the progress bar  
     progressFill.style.width = questionProgress;
@@ -185,6 +196,9 @@ function displayQuestion() {
 
 }
 
+
+
+
 // Check Answer Function (Work with the current question displayed)
 // It takes 2 arguments
 function checkAnswer(selectedAnswer, selectedButton) {
@@ -197,7 +211,7 @@ function checkAnswer(selectedAnswer, selectedButton) {
         // change the selected button to green
         selectedButton.classList.add("correct");
         // Increase the score by one
-        currentScore = currentScore + 1;
+        quizState.currentScore ++;
 
     } else {
         // Change the selected button to red
@@ -234,28 +248,25 @@ function checkAnswer(selectedAnswer, selectedButton) {
     nextBtn.disabled = false;
 }
 
-displayQuestion();
+
+
 
 // A function to display the next question
 function nextQuestion() {
     // 1. We need to increase the index of current question
-    currentQuestionIndex ++;
+    quizState.currentQuestionIndex ++;
 
     // Disable the next button 
     nextBtn.disabled = true; 
-    
+
     // 2. Then check that we're not in the last question
     // By checking the current question to the total questions (the length of the questions array)
-    if (currentQuestionIndex >= questions.length) {
+    if (quizState.currentQuestionIndex >= TOTALQUESTIONSNUMBER) {
 
-        // End the quiz
-        // Remove the options buttons
-        answerBtns.textContent = "";
-
-        // Change the button to start the quiz again
-        nextBtn.textContent = "Restart The Quiz";
-
+        // End the quiz and display final screen
+        quizState.quizComplete = true;
         displayScore()
+
     } else {
 
         // Display the next question
@@ -263,12 +274,59 @@ function nextQuestion() {
     }
 }
 
+
+
+
 // A function to display the score card
 function displayScore() {
+
+    // Remove the options buttons
+        answerBtns.textContent = "";
+
+        // Change the button to start the quiz again
+        nextBtn.textContent = "Restart The Quiz";
+
+        // Enable the button again
+        nextBtn.disabled = false;
 
     // Display the end message 
     questionCount.textContent = "You finished the quiz!";
     
     // Display user's score
-    question.textContent = "You scored " + currentScore + " out of " + questions.length;
+    question.textContent = "You scored " + quizState.currentScore + " out of " + TOTALQUESTIONSNUMBER;
 }
+
+
+
+
+// A To restart the quiz
+function restartQuiz() {
+    // Reset the quiz completion state
+    quizState.quizComplete = false;
+
+    // Reset the index 
+    quizState.currentQuestionIndex = 0;
+
+    // Reset the score
+    quizState.currentScore = 0;
+
+    // Change the text of the button back 
+    nextBtn.textContent = "Next Question";
+
+    // Disable the next question button
+    nextBtn.disabled = true; 
+
+    // display the first question
+    displayQuestion();
+}
+
+nextBtn.addEventListener("click", function() {
+    // A function to change the function of the button whether to display the next question or to restart the quiz
+    if (quizState.quizComplete === true) {
+        restartQuiz();
+    } else {
+        nextQuestion();
+    }
+});
+
+displayQuestion();
